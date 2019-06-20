@@ -1,0 +1,22 @@
+<br><br>
+<br>
+<div class="container pt-3">
+    <h1 class=" text-center mt-2">
+    Welcome {{user.name}}
+    </h1>
+    <div class="row mt-5">
+        <div class="col-12 col-sm-5">
+            <a href="" class="btn btn-block btn-danger mb-4">Create New Task</a>
+            <h3>Your Recent task</h3>
+            <hr class="bg-light">
+            <ul class="list-group ">
+                {{#each tasks}}
+                <a href="../task/mytask/{{id}}">
+                <li class="list-group-item list-group-item-dark">
+                <p>Task Id:{{id}}</p>                    
+                    Create On {{createdOn}}</li></a>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>

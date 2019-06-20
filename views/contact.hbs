@@ -1,0 +1,44 @@
+<div class="contact-wrapper">
+<br><br>
+    <div class="jumbotron contact-banner" >
+        <div class="container">
+            <h1 class="display-5">Any queries?!</h1>
+            <p class="lead"> we are glad to help you. Find the nearest sales office or research and development center to contact us directly</p>
+        </div>
+    </div>
+    {{!-- contact -form --}}
+ <div class="container" id="contact-form">
+      {{!-- errors --}}
+    {{#each errorMessage}}
+        <div class="alert alert-danger">
+          {{this.msg}}
+           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+    {{/each}}
+    {{!--end errors --}}
+<form action="/contact" method="post" class="needs-validation" novalidate style="margin-bottom:8%">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="Jon Snow" value="{{name}}">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="jonsnow@targerian.com" value="{{email}}">
+    <small id="emailHelp" class="form-text text-light">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Your Message</label>
+    <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3" placeholder="Winter is coming">{{message}}</textarea>
+  </div>
+  <button type="submit" class="btn btn-danger btn-lg">Submit</button>
+</form>
+</div>
+</div>
+ <footer class="text-center" id="contact-footer">
+    <div class="container text-muted">
+      <p>Copyrights &copy; 2018-2019 Tech2Tech <br>
+        <small>development done by Rahul Vanmali</small> </p>
+    </div>
+</footer>

@@ -1,0 +1,141 @@
+<br>
+<br>
+<br>
+{{> outputModal}}
+{{> invite}}
+
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <textarea name="" id="code-screen" class="">{{data}}</textarea>
+            <button class="btn btn-primary " id="run" data-toggle="modal" data-target="#outputModal">RUN</button>
+            <button class="btn btn-danger " id="invite" data-toggle="modal" data-target="#emailModal">Invite On Gmail</button>
+
+            <a href="../../codeApi/download/{{roomId}}" class="btn btn-info">Download code</a>
+        </div>
+
+       <div class="col-12 col-md-5" id="chatbox">   
+            <div class="card bg-dark" style="height:100%">
+            <div class="card-header"><span>CHAT ROOM</span><span class="float-right" id="chatbox-username">{{#if user}} {{user.name}} {{/if}}</span></div>
+            <div class="card-body bg-dark" id="chat-body">
+                <ul class="list-unstyled" id="chatbox-listMessages">
+                </ul>
+            </div>
+            {{!-- inline form with button --}}
+            <div class="input-group input-group-sm card-footer">
+                <input type="text" class="form-control" id="userMessage" onkeypress="check(event)" placeholder="your message..." aria-label="Recipient's username" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-sm btn-outline-secondary" type="button"  onclick="sendMessage()" id="button-addon2">Send</button>
+                </div>
+            </div>
+    </div>
+
+<input type="hidden" id="roomId" value="{{roomId}}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.44.0/mode/javascript/javascript.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/plugins/ot.js"></script>
+<script src="https://tect2techpeer.herokuapp.com/peer/peer.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/carlo/jquery-base64/master/jquery.base64.min.js"></script>
+
+<script>
+    let EditorClient = ot.EditorClient;
+    let SocketIOAdapter = ot.SocketIOAdapter;
+    let CodeMirrorAdapter = ot.CodeMirrorAdapter;
+    let roomId = document.getElementById("roomId").value;
+    let username = document.getElementById("chatbox-username").innerText;
+    let code = document.getElementById("code-screen");
+
+    let socket = io.connect();   
+    let editor = CodeMirror.fromTextArea(document.getElementById("code-screen"),{
+        lineNumbers:true,
+        theme:"dracula"
+    });
+
+    var cmClient;
+    function init(str, revision, clients, serverAdapter) {
+        if(!code){
+        editor.setValue(str);
+        }
+
+    cmClient = window.cmClient = new EditorClient(
+      revision, clients, serverAdapter, new CodeMirrorAdapter(editor)
+    );
+  };
+    let check =(e)=>{
+        if(e.keyCode == 13){
+            console.log("enter")
+            sendMessage();
+            console.log("press")
+        }
+    }
+
+    socket.on('doc', function(obj) {
+    init(obj.str, obj.revision, obj.clients, new SocketIOAdapter(socket));
+    });
+
+    if(username ===""){
+        let userId = Math.floor(Math.random() *9999).toString();
+        username = "user" + userId;
+        document.getElementById("chatbox-username").innerText = "user" + userId;
+    }
+    socket.emit('joinRoom',{room:roomId,username:username});
+    let userMessage  = (name,text)=>{
+        $("#chat-body").sc
+        let float="text-left";
+        let text_color="text-success"
+        return `<li class='media ${float}'><div class='media-body'><b class="my-1 ${text_color}">${name}</b><p class="text-muted">${text}</p></div></li>`;
+        }
+    
+    let sendMessage=()=>{
+        let userMessage = document.getElementById("userMessage").value;
+        socket.emit('chatMessage',{message:userMessage,username:username});
+        document.getElementById("userMessage").value =""
+        scrollbottom();
+    }
+    socket.on('chatMessage',(data)=>{
+        $("#chatbox-listMessages").append(userMessage(data.username,data.message))
+    })
+    
+    function scrollbottom(){
+        var msgDiv = document.getElementById("chat-body");
+        msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
+$("#run").click(function(){ 
+
+    let taskid =  roomId;
+    let content = editor.getValue();
+    $.post("../../codeApi/execute",{task:taskid,content:content})
+      .done(result=>{
+        $("#outputModal").modal("show")
+        $(".modal-body").html("<p class='lead text-dark'>> "+result.result+"<p>");
+      });
+      
+    
+})
+let invite =()=>{
+    $.post("")
+        .done()
+        .failed()
+}
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    
+    
+</script>
+<style>
+   html, body{
+       max-width: 100%;
+       overflow-x:hidden;
+    }
+    #chat-body{
+      overflow-y:scroll;
+      }
+    @media (min-width: 576px) { 
+        #chat-body{
+            height: 200px;
+        }
+        .CodeMirror{
+        font-family: Arial, monospace;
+        font-size: 1rem;
+        }
+    }
+</style>
