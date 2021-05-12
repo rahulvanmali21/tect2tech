@@ -19,7 +19,7 @@
     "handlebars": "^4.1.2",
     "hbs": "^4.0.4",
     "mongoose": "^5.4.3",
-    "nodemailer": "^5.1.1",
+    "nodemailer": "^6.4.16",
     "ot": "git+https://github.com/Operational-Transformation/ot.js.git",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
