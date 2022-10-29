@@ -17,7 +17,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^5.3.1",
     "handlebars": "^4.7.7",
-    "hbs": "^4.0.4",
+    "hbs": "^4.2.0",
     "mongoose": "^5.4.3",
     "nodemailer": "^5.1.1",
     "ot": "git+https://github.com/Operational-Transformation/ot.js.git",
